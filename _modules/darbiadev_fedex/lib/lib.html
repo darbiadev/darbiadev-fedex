@@ -1,0 +1,335 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>darbiadev_fedex.lib.lib &mdash; darbiadev-fedex 0.2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> darbiadev-fedex
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">darbiadev-fedex</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>darbiadev_fedex.lib.lib</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for darbiadev_fedex.lib.lib</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">xmltodict</span>
+
+
+<div class="viewcode-block" id="FedExServices"><a class="viewcode-back" href="../../../api/darbiadev_fedex.lib.html#darbiadev_fedex.lib.lib.FedExServices">[docs]</a><span class="k">class</span> <span class="nc">FedExServices</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A class wrapping FedEx&#39;s SOAP API.</span>
+
+<span class="sd">    This class wraps FedEx&#39;s API, using HTTP POST requests to send SOAP envelopes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">web_service_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">account_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">meter_number</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">web_service_url</span> <span class="o">=</span> <span class="n">web_service_url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__password</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">password</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__account_number</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">account_number</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__meter_number</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">meter_number</span>
+
+    <span class="k">def</span> <span class="nf">_make_request</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">soap_envelope</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;post&#39;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;method&#39;</span><span class="p">:</span> <span class="n">method</span><span class="p">,</span>
+            <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">web_service_url</span><span class="p">,</span>
+            <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">soap_envelope</span><span class="p">,</span>
+            <span class="s1">&#39;headers&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="s1">&#39;text/xml;charset=utf-8&#39;</span><span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+
+<div class="viewcode-block" id="FedExServices.track"><a class="viewcode-back" href="../../../api/darbiadev_fedex.lib.html#darbiadev_fedex.lib.lib.FedExServices.track">[docs]</a>    <span class="k">def</span> <span class="nf">track</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">tracking_number</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">):</span>
+        <span class="n">soap_envelope</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        &lt;soapenv:Envelope xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:v19=&quot;http://fedex.com/ws/track/v19&quot;&gt;</span>
+<span class="s2">            &lt;soapenv:Header/&gt;</span>
+<span class="s2">            &lt;soapenv:Body&gt;</span>
+<span class="s2">                &lt;v19:TrackRequest&gt;</span>
+<span class="s2">                    &lt;v19:WebAuthenticationDetail&gt;</span>
+<span class="s2">                        &lt;v19:ParentCredential&gt;</span>
+<span class="s2">                            &lt;v19:Key&gt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__key</span><span class="si">}</span><span class="s2">&lt;/v19:Key&gt;</span>
+<span class="s2">                            &lt;v19:Password&gt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__password</span><span class="si">}</span><span class="s2">&lt;/v19:Password&gt;</span>
+<span class="s2">                        &lt;/v19:ParentCredential&gt;</span>
+<span class="s2">                        &lt;v19:UserCredential&gt;</span>
+<span class="s2">                            &lt;v19:Key&gt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__key</span><span class="si">}</span><span class="s2">&lt;/v19:Key&gt;</span>
+<span class="s2">                            &lt;v19:Password&gt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__password</span><span class="si">}</span><span class="s2">&lt;/v19:Password&gt;</span>
+<span class="s2">                        &lt;/v19:UserCredential&gt;</span>
+<span class="s2">                    &lt;/v19:WebAuthenticationDetail&gt;</span>
+<span class="s2">                    &lt;v19:ClientDetail&gt;</span>
+<span class="s2">                        &lt;v19:AccountNumber&gt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__account_number</span><span class="si">}</span><span class="s2">&lt;/v19:AccountNumber&gt;</span>
+<span class="s2">                        &lt;v19:MeterNumber&gt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__meter_number</span><span class="si">}</span><span class="s2">&lt;/v19:MeterNumber&gt;</span>
+<span class="s2">                    &lt;/v19:ClientDetail&gt;</span>
+<span class="s2">                    &lt;v19:TransactionDetail&gt;</span>
+<span class="s2">                        &lt;v19:CustomerTransactionId&gt;Track By Number_v19&lt;/v19:CustomerTransactionId&gt;</span>
+<span class="s2">                        &lt;v19:Localization&gt;</span>
+<span class="s2">                            &lt;v19:LanguageCode&gt;EN&lt;/v19:LanguageCode&gt;</span>
+<span class="s2">                            &lt;v19:LocaleCode&gt;US&lt;/v19:LocaleCode&gt;</span>
+<span class="s2">                        &lt;/v19:Localization&gt;</span>
+<span class="s2">                    &lt;/v19:TransactionDetail&gt;</span>
+<span class="s2">                    &lt;v19:Version&gt;</span>
+<span class="s2">                        &lt;v19:ServiceId&gt;trck&lt;/v19:ServiceId&gt;</span>
+<span class="s2">                        &lt;v19:Major&gt;19&lt;/v19:Major&gt;</span>
+<span class="s2">                        &lt;v19:Intermediate&gt;0&lt;/v19:Intermediate&gt;</span>
+<span class="s2">                        &lt;v19:Minor&gt;0&lt;/v19:Minor&gt;</span>
+<span class="s2">                    &lt;/v19:Version&gt;</span>
+<span class="s2">                    &lt;v19:SelectionDetails&gt;</span>
+<span class="s2">                        &lt;v19:CarrierCode&gt;FDXE&lt;/v19:CarrierCode&gt;</span>
+<span class="s2">                        &lt;v19:PackageIdentifier&gt;</span>
+<span class="s2">                            &lt;v19:Type&gt;TRACKING_NUMBER_OR_DOORTAG&lt;/v19:Type&gt;</span>
+<span class="s2">                            &lt;v19:Value&gt;</span><span class="si">{</span><span class="n">tracking_number</span><span class="si">}</span><span class="s2">&lt;/v19:Value&gt;</span>
+<span class="s2">                        &lt;/v19:PackageIdentifier&gt;</span>
+<span class="s2">                        &lt;v19:ShipmentAccountNumber/&gt;</span>
+<span class="s2">                        &lt;v19:SecureSpodAccount/&gt;</span>
+<span class="s2">                        &lt;v19:Destination&gt;</span>
+<span class="s2">                            &lt;v19:GeographicCoordinates&gt;rates evertitque aequora&lt;/v19:GeographicCoordinates&gt;</span>
+<span class="s2">                        &lt;/v19:Destination&gt;</span>
+<span class="s2">                    &lt;/v19:SelectionDetails&gt;</span>
+<span class="s2">                &lt;/v19:TrackRequest&gt;</span>
+<span class="s2">            &lt;/soapenv:Body&gt;</span>
+<span class="s2">        &lt;/soapenv:Envelope&gt;</span>
+<span class="s2">        &quot;&quot;&quot;</span>
+
+        <span class="n">content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_request</span><span class="p">(</span><span class="n">soap_envelope</span><span class="o">=</span><span class="n">soap_envelope</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">xmltodict</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">dict_constructor</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+
+        <span class="n">headless_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;SOAP-ENV:Envelope&#39;</span><span class="p">][</span><span class="s1">&#39;SOAP-ENV:Body&#39;</span><span class="p">][</span><span class="s1">&#39;TrackReply&#39;</span><span class="p">]</span>
+        <span class="n">headless_data</span><span class="p">[</span><span class="s1">&#39;_original&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">content</span>
+
+        <span class="k">return</span> <span class="n">headless_data</span></div></div>
+
+
+<span class="c1"># Finicky ripoff of JSON tracking method used on FedEx.com</span>
+<span class="k">def</span> <span class="nf">_web_track</span><span class="p">(</span><span class="n">tracking_number</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
+            <span class="s1">&#39;TrackPackagesRequest&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;appType&#39;</span><span class="p">:</span> <span class="s1">&#39;wtrk&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;uniqueKey&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;processingParameters&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;anonymousTransaction&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;clientId&#39;</span><span class="p">:</span> <span class="s1">&#39;WTRK&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;returnDetailedErrors&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;returnLocalizedDateTime&#39;</span><span class="p">:</span> <span class="kc">False</span>
+                <span class="p">},</span>
+                <span class="s1">&#39;trackingInfoList&#39;</span><span class="p">:</span> <span class="p">[{</span>
+                    <span class="s1">&#39;trackNumberInfo&#39;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s1">&#39;trackingNumber&#39;</span><span class="p">:</span> <span class="n">tracking_number</span><span class="p">,</span>
+                        <span class="s1">&#39;trackingQualifier&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;trackingCarrier&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span>
+                    <span class="p">}</span>
+                <span class="p">}]</span>
+            <span class="p">}</span>
+        <span class="p">}),</span>
+        <span class="s1">&#39;action&#39;</span><span class="p">:</span> <span class="s1">&#39;trackpackages&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;locale&#39;</span><span class="p">:</span> <span class="s1">&#39;en_US&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;format&#39;</span><span class="p">:</span> <span class="s1">&#39;json&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="mi">99</span>
+    <span class="p">}</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;https://www.fedex.com/trackingCal/track&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Bradley Reynolds.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
