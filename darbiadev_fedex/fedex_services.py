@@ -7,10 +7,7 @@ import xmltodict
 
 
 class FedExServices:
-    """A class wrapping FedEx's SOAP API.
-
-    This class wraps FedEx's API, using HTTP POST requests to send SOAP envelopes.
-    """
+    """This class wraps FedEx's API, using HTTP POST requests to send SOAP envelopes."""
 
     def __init__(
             self,
@@ -46,6 +43,8 @@ class FedExServices:
             self,
             tracking_number: str
     ):
+        """Get tracking details for a tracking number"""
+
         soap_envelope = f"""
         <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v19="http://fedex.com/ws/track/v19">
             <soapenv:Header/>
@@ -104,8 +103,8 @@ class FedExServices:
         return headless_data
 
 
-# Finicky ripoff of JSON tracking method used on FedEx.com
 def _web_track(tracking_number):
+    """Finicky ripoff of JSON tracking method used on FedEx.com"""
     data = {
         'data': json.dumps({
             'TrackPackagesRequest': {
@@ -131,6 +130,7 @@ def _web_track(tracking_number):
         'format': 'json',
         'version': 99
     }
+
     response = requests.post('https://www.fedex.com/trackingCal/track', data=data)
 
     return response.json()

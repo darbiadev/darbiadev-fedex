@@ -1,19 +1,23 @@
-.. darbiadev-fedex documentation master file, created by
-   sphinx-quickstart on Thu Jul 29 21:02:56 2021.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
-Welcome to darbiadev-fedex's documentation!
-===========================================
+darbiadev-fedex
+=============
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :glob:
 
+Module Index
+------------
 
+Each of the ``darbiadev_fedex`` modules is documented here.
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   fedex_services
 
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`
