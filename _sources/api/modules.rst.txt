@@ -1,7 +1,0 @@
-darbiadev_fedex
-===============
-
-.. toctree::
-   :maxdepth: 4
-
-   darbiadev_fedex
