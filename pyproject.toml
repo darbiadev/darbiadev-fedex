@@ -13,7 +13,7 @@ documentation = "https://darbiadev.github.io/darbiadev-fedex/"
 python = "^3.9"
 
 requests = "^2.26.0"
-xmltodict = "^0.12.0"
+xmltodict = ">=0.12,<0.14"
 
 # Docs
 sphinx = { version = "^4.1.1", optional = true }
