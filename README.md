@@ -1,6 +1,19 @@
 # darbiadev-fedex
 
 This package provides a wrapper for FedEx's API.
-It is intended to be a mostly transparent package, so it returns the API responses with minimal modification.
 
-Sphinx documentation is hosted [here](https://darbiadev.github.io/darbiadev-fedex/)
+### Example usage
+
+```python
+from darbiadev_fedex import FedExServices
+
+client = FedExServices(
+    web_service_url="https://wsbeta.fedex.com/web-services",
+    key="key",
+    password="password",
+    account_number="account_number",
+    meter_number="meter_number",
+)
+
+print(client.track("500947581425"))
+```

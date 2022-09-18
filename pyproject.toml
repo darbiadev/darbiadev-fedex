@@ -1,47 +1,57 @@
-[tool.poetry]
+[project]
 name = "darbiadev-fedex"
 version = "0.3.0"
-description = "darbiadev-fedex"
+description = "A wrapper for FedEx's API"
 authors = ["Bradley Reynolds <bradley.reynolds@darbia.dev>"]
 license = "MIT"
 readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.7"
+
+[project.urls]
 repository = "https://github.com/darbiadev/darbiadev-fedex"
 documentation = "https://darbiadev.github.io/darbiadev-fedex/"
 
-[tool.poetry.dependencies]
-# Python
-python = "^3.9"
+dependencies = [
+    "requests>=2.26.0",
+    "xmltodict>=0.12,<0.14",
+]
 
-requests = "^2.26.0"
-xmltodict = ">=0.12,<0.14"
-
-# Docs
-sphinx = { version = ">=4.1.1,<6.0.0", optional = true }
-sphinx-autodoc-annotation = { version =  "^1.0-1", optional = true }
-sphinxcontrib-packages = { version = "^1.0.1", optional = true }
-sphinxcontrib-napoleon = { version =  "^0.7", optional = true }
-sphinxcontrib-apidoc = { version = "^0.3.0", optional = true }
-sphinxcontrib-autoprogram = { version = "^0.1.7", optional = true }
-sphinx-rtd-theme = { version = ">=0.5.2,<1.1.0", optional = true }
-toml = { version = "^0.10.2", optional = true }
-
-# Tests
-pytest = { version = ">=6.2.4,<8.0.0", optional = true }
-tox = { version = "^3.24.0", optional = true }
-
-
-[tool.poetry.extras]
-docs = ['sphinx', 'sphinx-autodoc-annotation', 'sphinxcontrib-packages', 'sphinxcontrib-napoleon', 'sphinxcontrib-apidoc', 'sphinxcontrib-autoprogram', 'sphinx_rtd_theme', 'toml']
-tests = ['pytest', 'tox']
-
-[tool.poetry.dev-dependencies]
+[project.optional-dependencies]
+dev = [
+    "pylint>=2.12.2",
+    "pytest>=6.2.5",
+    "pytest-cov>=3.0.0",
+    "black>=21.12b0",
+]
+tests = [
+    "pytest>=6.2.5",
+]
+docs = [
+    "sphinx>=4.3.2",
+    "sphinxcontrib-autoprogram>=0.1.7",
+    "sphinx-rtd-theme>=1.0.0",
+    "toml>=0.10.2",
+]
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
 
-[tool.tox]
-legacy_tox_ini = """
-[tox]
-isolated_build = True
-"""
+[tool.sphinx]
+copyright = "Darbia"
+author = "Bradley Reynolds"
+api_dir = "darbiadev_ups"
+
+[tool.black]
+target-version = ["py310"]
+line-length = 120
+
+[tool.isort]
+profile = "black"
+
+[tool.pytest.ini_options]
+addopts = "tests -r a -v --doctest-modules src"
+
+[tool.pylint.format]
+max-line-length = 120

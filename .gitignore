@@ -3,9 +3,7 @@
 
 # Packing
 darbiadev_fedex.egg-info
-build
 dist
-poetry.lock
 
 # Virtual environment
 venv
@@ -14,10 +12,4 @@ venv
 __pycache__
 
 # Docs
-docs/_build
-
-# Testing
-.tox
-
-# Type checking
-.mypy_cache
+docs/build
