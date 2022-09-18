@@ -1,4 +1,6 @@
-#!/usr/bin/env python
+"""A wrapper for FedEx's API"""
+
+from __future__ import annotations
 
 import json
 
@@ -9,14 +11,7 @@ import xmltodict
 class FedExServices:
     """This class wraps FedEx's API, using HTTP POST requests to send SOAP envelopes."""
 
-    def __init__(
-            self,
-            web_service_url: str,
-            key: str,
-            password: str,
-            account_number: str,
-            meter_number: str
-    ):
+    def __init__(self, web_service_url: str, key: str, password: str, account_number: str, meter_number: str):
         self.web_service_url = web_service_url
         self.__key: str = key
         self.__password: str = password
@@ -24,25 +19,24 @@ class FedExServices:
         self.__meter_number: str = meter_number
 
     def _make_request(
-            self,
-            soap_envelope: str,
-            method: str = 'post'
+        self,
+        soap_envelope: str,
+        method: str = "post",
+        timeout: int = 500,
     ) -> str:
         args = {
-            'method': method,
-            'url': self.web_service_url,
-            'data': soap_envelope,
-            'headers': {'Content-Type': 'text/xml;charset=utf-8'}
+            "method": method,
+            "url": self.web_service_url,
+            "data": soap_envelope,
+            "headers": {"Content-Type": "text/xml;charset=utf-8"},
+            "timeout": timeout,
         }
 
         response = requests.request(**args)
         response.raise_for_status()
         return response.content.decode()
 
-    def track(
-            self,
-            tracking_number: str
-    ):
+    def track(self, tracking_number: str):
         """Get tracking details for a tracking number"""
 
         soap_envelope = f"""
@@ -97,8 +91,8 @@ class FedExServices:
         content = self._make_request(soap_envelope=soap_envelope)
         data = xmltodict.parse(content, dict_constructor=dict)
 
-        headless_data = data['SOAP-ENV:Envelope']['SOAP-ENV:Body']['TrackReply']
-        headless_data['_original'] = content
+        headless_data = data["SOAP-ENV:Envelope"]["SOAP-ENV:Body"]["TrackReply"]
+        headless_data["_original"] = content
 
         return headless_data
 
@@ -106,31 +100,35 @@ class FedExServices:
 def _web_track(tracking_number):
     """Finicky ripoff of JSON tracking method used on FedEx.com"""
     data = {
-        'data': json.dumps({
-            'TrackPackagesRequest': {
-                'appType': 'wtrk',
-                'uniqueKey': '',
-                'processingParameters': {
-                    'anonymousTransaction': True,
-                    'clientId': 'WTRK',
-                    'returnDetailedErrors': True,
-                    'returnLocalizedDateTime': False
-                },
-                'trackingInfoList': [{
-                    'trackNumberInfo': {
-                        'trackingNumber': tracking_number,
-                        'trackingQualifier': '',
-                        'trackingCarrier': ''
-                    }
-                }]
+        "data": json.dumps(
+            {
+                "TrackPackagesRequest": {
+                    "appType": "wtrk",
+                    "uniqueKey": "",
+                    "processingParameters": {
+                        "anonymousTransaction": True,
+                        "clientId": "WTRK",
+                        "returnDetailedErrors": True,
+                        "returnLocalizedDateTime": False,
+                    },
+                    "trackingInfoList": [
+                        {
+                            "trackNumberInfo": {
+                                "trackingNumber": tracking_number,
+                                "trackingQualifier": "",
+                                "trackingCarrier": "",
+                            }
+                        }
+                    ],
+                }
             }
-        }),
-        'action': 'trackpackages',
-        'locale': 'en_US',
-        'format': 'json',
-        'version': 99
+        ),
+        "action": "trackpackages",
+        "locale": "en_US",
+        "format": "json",
+        "version": 99,
     }
 
-    response = requests.post('https://www.fedex.com/trackingCal/track', data=data)
+    response = requests.post("https://www.fedex.com/trackingCal/track", data=data, timeout=500)
 
     return response.json()
