@@ -2,7 +2,9 @@
 name = "darbiadev-fedex"
 version = "0.3.0"
 description = "A wrapper for FedEx's API"
-authors = ["Bradley Reynolds <bradley.reynolds@darbia.dev>"]
+authors = [
+    { name = "Bradley Reynolds", email = "bradley.reynolds@darbia.dev" },
+]
 license = { text = "MIT" }
 readme = "README.md"
 requires-python = ">=3.7"
