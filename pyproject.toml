@@ -56,3 +56,9 @@ addopts = "tests -r a -v --doctest-modules src"
 
 [tool.pylint.format]
 max-line-length = 120
+
+[tool.pylint.messages_control]
+disable = "R0903, R0913"
+# justifications:
+# R0903 (too-few-public-methods) - FIXME: implement more methods
+# R0913 (too-many-arguments) - addresses have lots of fields
