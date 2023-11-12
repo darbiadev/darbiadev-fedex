@@ -1,24 +1,27 @@
 darbiadev-fedex
-=============
+===============
 
-.. toctree::
-   :maxdepth: 2
-   :glob:
+A wrapper for FedEx's API
 
 Module Index
 ------------
 
-Each of the ``darbiadev_fedex`` modules is documented here.
-
 .. toctree::
    :maxdepth: 1
-   :glob:
 
-   fedex_services
+   autoapi/index
 
-Indices and tables
-------------------
+.. toctree::
+   :caption: Other:
+   :hidden:
+
+   changelog
+   history
+
+Extras
+------
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
+* :doc:`changelog`
+* :doc:`history`

@@ -1,6 +1,6 @@
-"""Testing the client"""
+"""Testing the client."""
 
 
 def test_smoke():
-    """smoke test"""
+    """Smoke test."""
     assert 1 == 1

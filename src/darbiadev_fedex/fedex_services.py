@@ -1,4 +1,4 @@
-"""A wrapper for FedEx's API"""
+"""A wrapper for FedEx's API."""
 
 from __future__ import annotations
 
@@ -11,7 +11,14 @@ import xmltodict
 class FedExServices:
     """This class wraps FedEx's API, using HTTP POST requests to send SOAP envelopes."""
 
-    def __init__(self, web_service_url: str, key: str, password: str, account_number: str, meter_number: str):
+    def __init__(
+        self,
+        web_service_url: str,
+        key: str,
+        password: str,
+        account_number: str,
+        meter_number: str,
+    ) -> None:
         self.web_service_url = web_service_url
         self.__key: str = key
         self.__password: str = password
@@ -37,8 +44,7 @@ class FedExServices:
         return response.content.decode()
 
     def track(self, tracking_number: str):
-        """Get tracking details for a tracking number"""
-
+        """Get tracking details for a tracking number."""
         soap_envelope = f"""
         <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v19="http://fedex.com/ws/track/v19">
             <soapenv:Header/>
@@ -98,7 +104,7 @@ class FedExServices:
 
 
 def _web_track(tracking_number):
-    """Finicky ripoff of JSON tracking method used on FedEx.com"""
+    """Finicky ripoff of JSON tracking method used on FedEx.com."""
     data = {
         "data": json.dumps(
             {
@@ -117,11 +123,11 @@ def _web_track(tracking_number):
                                 "trackingNumber": tracking_number,
                                 "trackingQualifier": "",
                                 "trackingCarrier": "",
-                            }
-                        }
+                            },
+                        },
                     ],
-                }
-            }
+                },
+            },
         ),
         "action": "trackpackages",
         "locale": "en_US",
@@ -129,6 +135,10 @@ def _web_track(tracking_number):
         "version": 99,
     }
 
-    response = requests.post("https://www.fedex.com/trackingCal/track", data=data, timeout=500)
+    response = requests.post(
+        "https://www.fedex.com/trackingCal/track",
+        data=data,
+        timeout=500,
+    )
 
     return response.json()
