@@ -1,18 +1,17 @@
 """A wrapper for FedEx's API."""
 
-from __future__ import annotations
-
 import json
+from typing import Self
 
 import requests
 import xmltodict
 
 
 class FedExServices:
-    """This class wraps FedEx's API, using HTTP POST requests to send SOAP envelopes."""
+    """Wraps FedEx's API, using HTTP POST requests to send SOAP envelopes."""
 
-    def __init__(
-        self,
+    def __init__( # noqa: PLR0913 - Will be replaced with just creds when we update to the new OAUTH API
+        self: Self,
         web_service_url: str,
         key: str,
         password: str,
@@ -26,7 +25,7 @@ class FedExServices:
         self.__meter_number: str = meter_number
 
     def _make_request(
-        self,
+        self: Self,
         soap_envelope: str,
         method: str = "post",
         timeout: int = 500,
@@ -43,7 +42,7 @@ class FedExServices:
         response.raise_for_status()
         return response.content.decode()
 
-    def track(self, tracking_number: str):
+    def track(self: Self, tracking_number: str) -> dict:
         """Get tracking details for a tracking number."""
         soap_envelope = f"""
         <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v19="http://fedex.com/ws/track/v19">
@@ -103,7 +102,7 @@ class FedExServices:
         return headless_data
 
 
-def _web_track(tracking_number):
+def _web_track(tracking_number: str) -> dict:
     """Finicky ripoff of JSON tracking method used on FedEx.com."""
     data = {
         "data": json.dumps(

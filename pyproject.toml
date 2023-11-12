@@ -34,7 +34,7 @@ api_dir = "darbiadev_fedex"
 [tool.ruff]
 preview = true
 unsafe-fixes = true
-target-version = "py312"
+target-version = "py311"
 select = ["ALL"]
 line-length = 120
 ignore = [
