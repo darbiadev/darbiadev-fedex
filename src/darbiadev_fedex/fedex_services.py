@@ -10,7 +10,7 @@ import xmltodict
 class FedExServices:
     """Wraps FedEx's API, using HTTP POST requests to send SOAP envelopes."""
 
-    def __init__( # noqa: PLR0913 - Will be replaced with just creds when we update to the new OAUTH API
+    def __init__(  # noqa: PLR0913 - Will be replaced with just creds when we update to the new OAUTH API
         self: Self,
         web_service_url: str,
         key: str,
